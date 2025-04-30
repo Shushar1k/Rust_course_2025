@@ -4,42 +4,65 @@ use std::collections::VecDeque;
 
 #[derive(Default)]
 pub struct MinQueue<T> {
-    // TODO: your code goes here.
+    input: VecDeque<(i32, i32)>,
+    output: VecDeque<(i32, i32)>,
 }
 
 impl<T: Clone + Ord> MinQueue<T> {
     pub fn new() -> Self {
-        // TODO: your code goes here.
-        unimplemented!()
+        input = VecDeque::new();
+        output = VecDeque::new();
     }
 
     pub fn push(&mut self, val: T) {
-        // TODO: your code goes here.
-        unimplemented!()
+        if input.is_empty() {
+            input.push_back((val, val));
+        } else {
+            input.push_back((val, std::cmp::min(val, input.back().1)));
+        }
     }
 
     pub fn pop(&mut self) -> Option<T> {
-        // TODO: your code goes here.
-        unimplemented!()
+        if !output.is_empty() {
+            output.pop_back();
+        } else {
+            loop {
+                if input.is_empty() {
+                    break;
+                }
+                let pare = input.back();
+                input.pop_back();
+                if output.is_empty() {
+                    output.push_back((pare.1, pare.1);
+                } else {
+                    output.push_back((pare.1, std::cmp::min(pare.1, output.back().1)));
+                }
+            }
+            output.pop_back();
+        }
     }
 
     pub fn front(&self) -> Option<&T> {
-        // TODO: your code goes here.
-        unimplemented!()
+        if self.is_empty() {
+            return output.back();
+        }
+        if output.is_empty() {
+            return input.front().1;
+        }
+        return output.back().1;
     }
 
     pub fn min(&self) -> Option<&T> {
-        // TODO: your code goes here.
-        unimplemented!()
+        let min1 = input.back().2;
+        let min2 = input.back().2;
+        std::cmp::min(min1, min2);
     }
 
     pub fn len(&self) -> usize {
-        // TODO: your code goes here.
-        unimplemented!()
+        input.len() + output.len();
     }
 
     pub fn is_empty(&self) -> bool {
-        // TODO: your code goes here.
-        unimplemented!()
+        self.len() == 0;
     }
 }
