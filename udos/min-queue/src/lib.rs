@@ -18,7 +18,7 @@ impl<T: Clone + Ord> MinQueue<T> {
 
     pub fn push(&mut self, val: T) {
         if self.input.is_empty() {
-            self.input.push_back((val, val));
+            self.input.push_back((val.clone(), val.clone()));
         } else {
             let new_min : T = std::cmp::min(val.clone(), self.input.back().unwrap().1.clone());
             self.input.push_back((val, new_min));
@@ -38,9 +38,9 @@ impl<T: Clone + Ord> MinQueue<T> {
                 let pare = self.input.back().unwrap().clone();
                 self.input.pop_back();
                 if self.output.is_empty() {
-                    self.output.push_back((pare.0, pare.0));
+                    self.output.push_back((pare.0.clone(), pare.0.clone()));
                 } else {
-                    self.output.push_back((pare.0, std::cmp::min(pare.0, self.output.back().map(|pair| &pair.0))));
+                    self.output.push_back((pare.0.clone(), std::cmp::min(pare.0.clone(), self.output.back().unwrap().0.clone())));
                 }
             }
             self.output.pop_back();
