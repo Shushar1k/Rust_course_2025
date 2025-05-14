@@ -40,7 +40,7 @@ impl<T: Clone + Ord> MinQueue<T> {
                 if self.output.is_empty() {
                     self.output.push_back((pare.0.clone(), pare.0.clone()));
                 } else {
-                    self.output.push_back((pare.0.clone(), std::cmp::min(pare.0.clone(), self.output.back().unwrap().0.clone())));
+                    self.output.push_back((pare.0.clone(), std::cmp::min(pare.0.clone(), self.output.back().unwrap().1.clone())));
                 }
             }
             self.output.pop_back();
@@ -73,5 +73,42 @@ impl<T: Clone + Ord> MinQueue<T> {
 
     pub fn is_empty(&self) -> bool {
         return self.len() == 0;
+    }
+}
+
+
+struct NaiveMinQueue<T> {
+    data: VecDeque<T>,
+}
+
+impl<T: Clone + Ord> NaiveMinQueue<T> {
+    pub fn new() -> Self {
+        Self {
+            data: VecDeque::new(),
+        }
+    }
+
+    pub fn push(&mut self, val: T) {
+        self.data.push_back(val);
+    }
+
+    pub fn pop(&mut self) -> Option<T> {
+        self.data.pop_front()
+    }
+
+    pub fn front(&self) -> Option<&T> {
+        self.data.front()
+    }
+
+    pub fn min(&self) -> Option<&T> {
+        self.data.iter().min()
+    }
+
+    pub fn len(&self) -> usize {
+        self.data.len()
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.data.is_empty()
     }
 }
