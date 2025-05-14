@@ -4,62 +4,71 @@ use std::collections::VecDeque;
 
 #[derive(Default)]
 pub struct MinQueue<T> {
-    input: VecDeque<(i32, i32)>,
-    output: VecDeque<(i32, i32)>,
+    input: VecDeque<(T, T)>,
+    output: VecDeque<(T, T)>,
 }
 
 impl<T: Clone + Ord> MinQueue<T> {
     pub fn new() -> Self {
-        input = VecDeque::new();
-        output = VecDeque::new();
+        Self {
+            input : VecDeque::new(),
+            output : VecDeque::new(),
+        }
     }
 
     pub fn push(&mut self, val: T) {
-        if input.is_empty() {
-            input.push_back((val, val));
+        if self.input.is_empty() {
+            self.input.push_back((val, val));
         } else {
-            input.push_back((val, std::cmp::min(val, input.back().1)));
+            let new_min : T = std::cmp::min(val.clone(), self.input.back().unwrap().1.clone());
+            self.input.push_back((val, new_min));
         }
     }
 
     pub fn pop(&mut self) -> Option<T> {
-        if !output.is_empty() {
-            output.pop_back();
+        let ans = self.front().cloned();
+        if !self.output.is_empty() {
+            self.output.pop_back();
+            return ans;
         } else {
             loop {
-                if input.is_empty() {
+                if self.input.is_empty() {
                     break;
                 }
-                let pare = input.back();
-                input.pop_back();
-                if output.is_empty() {
-                    output.push_back((pare.1, pare.1);
+                let pare = self.input.back().unwrap().clone();
+                self.input.pop_back();
+                if self.output.is_empty() {
+                    self.output.push_back((pare.0, pare.0));
                 } else {
-                    output.push_back((pare.1, std::cmp::min(pare.1, output.back().1)));
+                    self.output.push_back((pare.0, std::cmp::min(pare.0, self.output.back().map(|pair| &pair.0))));
                 }
             }
-            output.pop_back();
+            self.output.pop_back();
+            return ans;
         }
     }
 
     pub fn front(&self) -> Option<&T> {
-        if self.is_empty() {
-            return output.back();
+        if self.output.is_empty() {
+            return self.input.front().map(|pair| &pair.0);
         }
-        if output.is_empty() {
-            return input.front().1;
-        }
-        return output.back().1;
+        return self.output.back().map(|pair| &pair.0);
     }
 
     pub fn min(&self) -> Option<&T> {
-        let min1 = input.back().2;
-        let min2 = input.back().2;
-        std::cmp::min(min1, min2);
+        if self.input.is_empty() {
+            return self.output.back().map(|pair| &pair.1);
+        }
+        if self.output.is_empty() {
+            return self.input.back().map(|pair| &pair.1);
+        }
+        let min1 = self.input.back().map(|pair| &pair.1)?;
+        let min2 = self.output.back().map(|pair| &pair.1)?;
+        return Some(std::cmp::min(min1, min2));
     }
 
     pub fn len(&self) -> usize {
-        input.len() + output.len();
+        self.input.len() + self.output.len();
     }
 
     pub fn is_empty(&self) -> bool {
