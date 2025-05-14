@@ -41,15 +41,15 @@ impl<T: Clone + Default> Grid<T> {
     pub fn neighbours(&self, row: usize, col: usize) -> Vec<(usize, usize)> {
         let steps = vec![-1, 0, 1];
         let mut result: Vec<(usize, usize)> = vec![];
-        for i in steps {
-            for j in steps {
-                if i == 0 && j == 0 {
+        for i in &steps {
+            for j in &steps {
+                if *i == 0 && *j == 0 {
                     continue;
                 }
                 let xrow = row as isize + i;
                 let xcol = col as isize + j;
-                if xrow >= 0 && xrow < self.rows && xcol >= 0 && xcol < self.cols {
-                    result.push((xrow, xcol));
+                if xrow >= 0 && xrow < (self.rows as isize) && xcol >= 0 && xcol < (self.cols as isize) {
+                    result.push((xrow as usize, xcol as usize));
                 }
             }
         }
@@ -80,7 +80,7 @@ pub struct GameOfLife {
 
 impl GameOfLife {
     pub fn from_grid(grid: Grid<Cell>) -> Self {
-        Self{ grid: grid, };
+        return Self{ grid: grid, };
     }
 
     pub fn get_grid(&self) -> &Grid<Cell> {
@@ -89,7 +89,7 @@ impl GameOfLife {
 
     pub fn step(&mut self) {
         let (xrows, xcols) = self.grid.size();
-        let mut result = Grid<Cell>::new(xrows, xcols);
+        let mut result = Grid::new(xrows, xcols);
         for i in 0..xrows {
             for j in 0..xcols {
                 let neighbour = self.grid.neighbours(i, j);
