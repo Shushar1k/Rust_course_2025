@@ -68,10 +68,10 @@ impl<T: Clone + Ord> MinQueue<T> {
     }
 
     pub fn len(&self) -> usize {
-        self.input.len() + self.output.len();
+        return self.input.len() + self.output.len();
     }
 
     pub fn is_empty(&self) -> bool {
-        self.len() == 0;
+        return self.len() == 0;
     }
 }
